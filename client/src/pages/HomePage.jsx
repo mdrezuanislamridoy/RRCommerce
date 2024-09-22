@@ -66,7 +66,7 @@ export default function SliderTest() {
       <br />
       <div className="w-4/5 m-auto mt-20">
         <div className="todays">
-          <h3 className="text-red-600">Today's</h3>
+          <h3 className="text-red-600">Todays</h3>
         </div>
         <div className="flex justify-between">
           <div>

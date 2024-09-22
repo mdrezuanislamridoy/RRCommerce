@@ -5,6 +5,7 @@ import {
   faHeart,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
+import Logo from "../assets/logos.png";
 
 export default function Header() {
   return (
@@ -19,9 +20,8 @@ export default function Header() {
       </div>
       <div className="border-b-2">
         <nav className="flex justify-between h-20 items-center w-4/5 m-auto">
-          {/* Logo Section */}
           <div className="logo w-1/5">
-            <h2 className="text-2xl font-semibold ">RRCommerce</h2>
+            <img src={Logo} alt="" />
           </div>
 
           <ul className="flex w-2/5 justify-evenly">
