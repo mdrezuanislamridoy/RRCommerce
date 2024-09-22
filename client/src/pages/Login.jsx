@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import icon from "../assets/icon.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import context from "../context/context";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const { setIsLoggedIn } = useContext(context);
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -12,7 +15,6 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Ensure the email and password fields are not empty before making the request
     if (!user.email || !user.password) {
       setMessage("Email and password cannot be empty");
       return;
@@ -23,7 +25,7 @@ export default function Login() {
       headers: {
         "Content-Type": "application/json", // Correct headers for JSON
       },
-      body: JSON.stringify(user), // Send user state as JSON
+      body: JSON.stringify(user),
     })
       .then((res) => {
         if (!res.ok) {
@@ -32,20 +34,27 @@ export default function Login() {
         return res.json();
       })
       .then((data) => {
-        setMessage(data.message); // Show the response message
+        setMessage(data.message);
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+        setIsLoggedIn(true);
       })
       .catch((err) => {
         console.error(err);
         setMessage("Login failed, please check your credentials");
+        setIsLoggedIn(false);
       });
 
-    setUser({ email: "", password: "" }); // Reset form after submission
+    setUser({ email: "", password: "" });
   };
   return (
     <div className="my-20 flex justify-center items-center">
       <div className="w-96 shadow-xl border p-10 rounded-xl m-auto flex flex-col justify-center items-center">
         <h2 className="text-5xl text-slate-600 my-8 font-medium">Login</h2>
         <img src={icon} className="w-20 mb-6" alt="" />
+        {message && <p className="text-green-700">{message}</p>}
+
         <form action="/login" onSubmit={handleSubmit} method="post">
           <div>
             <input
@@ -54,10 +63,8 @@ export default function Login() {
               name="email"
               id="email"
               placeholder="Email"
-              value={user.email} // Bind input to user.email
-              onChange={
-                (e) => setUser({ ...user, email: e.target.value }) // Update state on change
-              }
+              value={user.email}
+              onChange={(e) => setUser({ ...user, email: e.target.value })}
             />
             <input
               type="password"
@@ -65,10 +72,8 @@ export default function Login() {
               id="password"
               placeholder="Password"
               className="my-4 px-2 py-1 w-full outline-none border-b-2"
-              value={user.password} // Bind input to user.password
-              onChange={
-                (e) => setUser({ ...user, password: e.target.value }) // Update state on change
-              }
+              value={user.password}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
             />
             <input
               type="submit"
@@ -82,8 +87,6 @@ export default function Login() {
             </p>
           </div>
         </form>
-
-        {message && <p>{message}</p>}
       </div>
     </div>
   );

@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import context from "../context/context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCartPlus,
@@ -8,6 +10,7 @@ import {
 import Logo from "../assets/logos.png";
 
 export default function Header() {
+  const { isLoggedIn } = useContext(context);
   return (
     <div>
       <div className="bg-black text-white text-center py-3 text-sm">
@@ -26,7 +29,7 @@ export default function Header() {
 
           <ul className="flex w-2/5 justify-evenly">
             <li>
-              <Link to="/home">Home</Link>
+              <Link to="/">Home</Link>
             </li>
             <li>
               <Link to="/contact">Contact</Link>
@@ -35,7 +38,11 @@ export default function Header() {
               <Link to="/about">About</Link>
             </li>
             <li>
-              <Link to="/signup">Sign Up</Link>
+              {isLoggedIn ? (
+                <Link to={"/profile"}>Profile</Link>
+              ) : (
+                <Link to="/signup">Sign Up</Link>
+              )}
             </li>
           </ul>
 

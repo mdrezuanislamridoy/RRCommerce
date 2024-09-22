@@ -9,6 +9,6 @@
     "uuid": "^10.0.0"
   },
   "scripts": {
-    "start": "nodemon src/index.js"
+    "start": "node init && nodemon src/index.js"
   }
 }
