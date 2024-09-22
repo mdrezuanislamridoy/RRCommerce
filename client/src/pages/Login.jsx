@@ -12,18 +12,34 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Ensure the email and password fields are not empty before making the request
+    if (!user.email || !user.password) {
+      setMessage("Email and password cannot be empty");
+      return;
+    }
+
     fetch("http://localhost:3300/login", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json", // Correct headers for JSON
       },
-      body: JSON.stringify(user),
+      body: JSON.stringify(user), // Send user state as JSON
     })
-      .then((res) => res.json())
-      .then((data) => setMessage(data.message))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Invalid login request");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setMessage(data.message); // Show the response message
+      })
+      .catch((err) => {
+        console.error(err);
+        setMessage("Login failed, please check your credentials");
+      });
 
-    setUser({ email: "", password: "" });
+    setUser({ email: "", password: "" }); // Reset form after submission
   };
   return (
     <div className="my-20 flex justify-center items-center">
@@ -38,6 +54,10 @@ export default function Login() {
               name="email"
               id="email"
               placeholder="Email"
+              value={user.email} // Bind input to user.email
+              onChange={
+                (e) => setUser({ ...user, email: e.target.value }) // Update state on change
+              }
             />
             <input
               type="password"
@@ -45,6 +65,10 @@ export default function Login() {
               id="password"
               placeholder="Password"
               className="my-4 px-2 py-1 w-full outline-none border-b-2"
+              value={user.password} // Bind input to user.password
+              onChange={
+                (e) => setUser({ ...user, password: e.target.value }) // Update state on change
+              }
             />
             <input
               type="submit"
@@ -58,6 +82,7 @@ export default function Login() {
             </p>
           </div>
         </form>
+
         {message && <p>{message}</p>}
       </div>
     </div>
